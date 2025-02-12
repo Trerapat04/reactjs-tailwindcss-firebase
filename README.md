@@ -4,12 +4,15 @@ This project is a web application built using **ReactJS**, **TailwindCSS**, and 
 
 # Installation
 1. **Clone this repository**:
+   
    git clone https://github.com/yourusername/reactjs-tailwindcss-firebase.git
    
 2.Navigate to the project directory
+
   cd reactjs-tailwindcss-firebase
   
 3. npm install
+   
    
 4.Set up Firebase
 -Create a Firebase project in the Firebase Console: https://console.firebase.google.com
@@ -24,6 +27,7 @@ REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 REACT_APP_FIREBASE_APP_ID=your-app-id
 REACT_APP_FIREBASE_MEASUREMENT_ID=your-measurement-id
 ************
+
 5.npm start dev
 
 # Usage
