@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState(""); 
-  const [loading, setLoading] = useState(false); // พิ่ม state สำหรับแสดงสถานะโหลด
-  const { signUp } = useUserAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signUp, logOut } = useUserAuth(); // ✅ ดึง logOut มาด้วย
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -16,35 +16,36 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); // เริ่มโหลด
+    setLoading(true);
     try {
       await signUp(formData.email, formData.password);
-      alert("✅ สมัครสมาชิกสำเร็จ!");
-      navigate("/login");
+      await logOut(); // ✅ ออกจากระบบหลังสมัครเสร็จ
+      alert("✅ Registration successful! Please log in.");
+      navigate("/login"); // ✅ ส่งไปหน้า Login
     } catch (err) {
       switch (err.code) {
         case "auth/email-already-in-use":
-          setError("❌ อีเมลนี้ถูกใช้ไปแล้ว กรุณาใช้เมลอื่น");
+          setError("❌ This email is already in use. Please use a different email.");
           break;
         case "auth/weak-password":
-          setError("❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+          setError("❌ Password must be at least 6 characters.");
           break;
         case "auth/invalid-email":
-          setError("❌ อีเมลไม่ถูกต้อง กรุณาตรวจสอบ");
+          setError("❌ Invalid email. Please check your input.");
           break;
         default:
-          setError("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
+          setError("❌ An error occurred. Please try again.");
       }
     }
-    setLoading(false); // หยุดโหลด
+    setLoading(false);
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-indigo-100">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-indigo-600 mb-6">สมัครสมาชิก</h2>
-        
-        {/*  แสดงข้อความข้อผิดพลาด */}
+        <h2 className="text-2xl font-bold text-indigo-600 mb-6">Sign Up</h2>
+
+        {/* Error Message */}
         {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
 
         <input
@@ -52,10 +53,8 @@ function Register() {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="📧 อีเมล"
-          className={`w-full p-2 border rounded-lg mb-4 ${
-            error ? "border-red-500" : "border-gray-300"
-          }`}
+          placeholder="📧 Email"
+          className="w-full p-2 border rounded-lg mb-4 border-gray-300"
         />
 
         <input
@@ -63,10 +62,8 @@ function Register() {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder="🔒 รหัสผ่าน"
-          className={`w-full p-2 border rounded-lg mb-6 ${
-            error ? "border-red-500" : "border-gray-300"
-          }`}
+          placeholder="🔒 Password"
+          className="w-full p-2 border rounded-lg mb-6 border-gray-300"
         />
 
         <button
@@ -78,7 +75,7 @@ function Register() {
           }`}
           disabled={loading || !formData.email || !formData.password}
         >
-          {loading ? "⏳ กำลังสมัคร..." : "📌 สมัครสมาชิก"}
+          {loading ? "⏳ Signing up..." : "📌 Sign Up"}
         </button>
       </form>
     </div>

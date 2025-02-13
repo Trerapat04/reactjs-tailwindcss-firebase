@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(""); 
-  const [loading, setLoading] = useState(false); // ✅ เพิ่ม state โหลด
+  const [loading, setLoading] = useState(false); // ✅ Loading state
   const { login } = useUserAuth();
   const navigate = useNavigate();
 
@@ -16,30 +16,30 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); // ✅ เริ่มโหลด
+    setLoading(true); // ✅ Start loading
 
     try {
       const userCredential = await login(formData.email, formData.password);
-      localStorage.setItem("user", JSON.stringify(userCredential.user)); // ✅ เก็บข้อมูล login
-      alert("✅ เข้าสู่ระบบสำเร็จ!");
+      localStorage.setItem("user", JSON.stringify(userCredential.user)); // ✅ Store user data
+      alert("✅ Login successful!");
       navigate("/");
     } catch (err) {
       switch (err.code) {
         case "auth/user-not-found":
-          setError("❌ ไม่พบบัญชีนี้ในระบบ");
+          setError("❌ No account found with this email.");
           break;
         case "auth/wrong-password":
-          setError("❌ รหัสผ่านไม่ถูกต้อง");
+          setError("❌ Incorrect password.");
           break;
         case "auth/invalid-credential":
-          setError("❌ อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+          setError("❌ Invalid email or password.");
           break;
         default:
-          setError("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
+          setError("❌ An error occurred. Please try again.");
       }
     }
 
-    setLoading(false); // ✅ หยุดโหลด
+    setLoading(false); // ✅ Stop loading
   };
 
   return (
@@ -48,18 +48,18 @@ function Login() {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
       >
-        <h2 className="text-2xl font-bold text-indigo-600 mb-6">เข้าสู่ระบบ</h2>
+        <h2 className="text-2xl font-bold text-indigo-600 mb-6">Login</h2>
 
-        {/* ✅ แสดงข้อความ error เป็นภาษาไทย */}
+        {/* ✅ Show error messages */}
         {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
 
-        {/* ✅ ขอบ input เป็นสีแดงถ้ามี error */}
+        {/* ✅ Change border color if there's an error */}
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="📧 อีเมล"
+          placeholder="📧 Email"
           className={`w-full p-2 border rounded-lg mb-4 ${
             error ? "border-red-500" : "border-gray-300"
           }`}
@@ -70,7 +70,7 @@ function Login() {
           name="password"
           value={formData.password}
           onChange={handleChange}
-          placeholder="🔒 รหัสผ่าน"
+          placeholder="🔒 Password"
           className={`w-full p-2 border rounded-lg mb-6 ${
             error ? "border-red-500" : "border-gray-300"
           }`}
@@ -85,7 +85,7 @@ function Login() {
           }`}
           disabled={loading || !formData.email || !formData.password}
         >
-          {loading ? "⏳ กำลังเข้าสู่ระบบ..." : "🔑 เข้าสู่ระบบ"}
+          {loading ? "⏳ Logging in..." : "🔑 Login"}
         </button>
       </form>
     </div>
