@@ -5,7 +5,7 @@ This project is a web application built using **ReactJS**, **TailwindCSS**, and 
 # Installation
 1. **Clone this repository**:
    
-   git clone https://github.com/yourusername/reactjs-tailwindcss-firebase.git
+   git clone 
    
 2.Navigate to the project directory
 
